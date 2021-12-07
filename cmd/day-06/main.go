@@ -16,10 +16,10 @@ func main() {
 	input := internal.ReadFileLines("cmd/day-06/input.txt")[0]
 	//input := inputRaw
 
-	lanternfishes := internal.ConvertStringsToInts(strings.Split(input, ","))
+	lanternFishes := internal.ConvertStringsToInts(strings.Split(input, ","))
 	lanternFishesCount := make([]int64, 9)
-	for i := 0; i < len(lanternfishes); i++ {
-		lanternFishesCount[lanternfishes[i]] += 1
+	for i := 0; i < len(lanternFishes); i++ {
+		lanternFishesCount[lanternFishes[i]] += 1
 	}
 
 	fmt.Println(lanternFishesCount)

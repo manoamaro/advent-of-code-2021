@@ -97,3 +97,41 @@ func IntsEqual(a, b []int) bool {
 
 	return true
 }
+
+func Permutations(arr []string) [][]string {
+	var helper func([]string, int)
+	var res [][]string
+
+	helper = func(arr []string, n int) {
+		if n == 1 {
+			tmp := make([]string, len(arr))
+			copy(tmp, arr)
+			res = append(res, tmp)
+		} else {
+			for i := 0; i < n; i++ {
+				helper(arr, n-1)
+				if n%2 == 1 {
+					tmp := arr[i]
+					arr[i] = arr[n-1]
+					arr[n-1] = tmp
+				} else {
+					tmp := arr[0]
+					arr[0] = arr[n-1]
+					arr[n-1] = tmp
+				}
+			}
+		}
+	}
+	helper(arr, len(arr))
+	return res
+}
+
+func SliceToInt(s []int) int {
+	res := 0
+	op := 1
+	for i := len(s) - 1; i >= 0; i-- {
+		res += s[i] * op
+		op *= 10
+	}
+	return res
+}

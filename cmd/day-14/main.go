@@ -3,7 +3,6 @@ package main
 import (
 	"aoc-2021/internal"
 	"fmt"
-	"math"
 	"strings"
 )
 
@@ -11,11 +10,11 @@ func main() {
 	input := internal.ReadFileLines("cmd/day-14/input.txt")
 	//input := strings.Split("NNCB\n\nCH -> B\nHH -> N\nCB -> H\nNH -> C\nHB -> C\nHC -> B\nHN -> C\nNN -> C\nBH -> H\nNC -> B\nNB -> B\nBN -> B\nBB -> N\nBC -> B\nCC -> N\nCN -> C", "\n")
 
-	pairInsertion := map[string]string{}
-
-	polymerTemplate := map[string]uint64{}
-
 	initialPolymerTemplate := ""
+
+	pairInsertion := map[string]string{}
+	polymerTemplate := map[string]uint64{}
+	elementsCount := map[string]uint64{}
 
 	for i, line := range input {
 		if i == 0 {
@@ -33,12 +32,16 @@ func main() {
 		polymerTemplate[initialPolymerTemplate[i:i+2]] += 1
 	}
 
-	fmt.Println(polymerTemplate)
+	for i := 0; i < len(initialPolymerTemplate); i++ {
+		elementsCount[initialPolymerTemplate[i:i+1]] += 1
+	}
 
 	for step := 0; step < 40; step++ {
 		newTemplate := map[string]uint64{}
 		for pair, count := range polymerTemplate {
 			insertion := pairInsertion[pair]
+			elementsCount[insertion] += count
+
 			newPair1 := pair[0:1] + insertion
 			newPair2 := insertion + pair[1:2]
 			newTemplate[newPair1] += count
@@ -46,21 +49,13 @@ func main() {
 		}
 
 		polymerTemplate = newTemplate
-		fmt.Println(polymerTemplate)
 	}
-
-	elementsCount := map[string]uint64{}
 
 	maxCount := uint64(0)
 
-	for pair, count := range polymerTemplate {
-		elementsCount[pair[0:1]] += count
-		elementsCount[pair[1:2]] += count
-		if elementsCount[pair[0:1]] > maxCount {
-			maxCount = elementsCount[pair[0:1]]
-		}
-		if elementsCount[pair[1:2]] > maxCount {
-			maxCount = elementsCount[pair[1:2]]
+	for _, count := range elementsCount {
+		if count > maxCount {
+			maxCount = count
 		}
 	}
 
@@ -75,7 +70,6 @@ func main() {
 	fmt.Println(maxCount)
 	fmt.Println(minCount)
 	fmt.Println(maxCount - minCount)
-	fmt.Println(uint64(math.Ceil(float64(maxCount-minCount) / 2)))
 }
 
 func old(input []string) {
